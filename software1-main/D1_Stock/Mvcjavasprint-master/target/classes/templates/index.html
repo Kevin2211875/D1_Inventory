@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Persona</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex-grow: 1;
+        }
+
+        .options-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .option-card {
+            display: inline-block;
+            width: 250px;
+            height: 250px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            padding: 20px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .option-card:hover {
+            transform: scale(1.05);
+        }
+
+        .option-card svg {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 10px;
+        }
+
+        footer {
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 14px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Personas</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="index.html" style="color: black">Inicio</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="content">
+    <h1 class="text-white text-center">Bienvenido a la página</h1>
+    <div class="options-container">
+        <!-- Recuadro Gerente -->
+        <div class="option-card">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-person-badge-fill" viewBox="0 0 16 16">
+                <path d="M6.5 2.5A2.5 2.5 0 1 1 11.5 2.5 2.5 2.5 0 0 1 6.5 2.5ZM8 8c3.866 0 7 1.582 7 3.5V14H1v-2.5C1 9.582 4.134 8 8 8Z"/>
+            </svg>
+            <a class="h5 d-block mt-2" href="/sesion_gerente">Iniciar Sesión como Gerente</a>
+        </div>
+
+        <!-- Recuadro Empleado -->
+        <div class="option-card">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                <path d="M8 0a8 8 0 1 0 8 8A8 8 0 0 0 8 0ZM8 15A7 7 0 1 1 15 8 7 7 0 0 1 8 15Z"/>
+                <path d="M8 4a3 3 0 1 0 3 3A3 3 0 0 0 8 4ZM8 8a3 3 0 0 0-3 3H11a3 3 0 0 0-3-3Z"/>
+            </svg>
+            <a class="h5 d-block mt-2" href="/sesion_empleado">Iniciar Sesión como Empleado</a>
+        </div>
+    </div>
+</div>
+
+<footer>
+    Contacto: soporte@empresa.com | Teléfono: +1-800-123-4567
+</footer>
+</body>
+</html>
+
+
