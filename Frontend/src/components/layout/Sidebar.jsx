@@ -1,24 +1,30 @@
 import { NavLink } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
-export default function Sidebar({ role }) {
-  const gerenteLinks = [
-    { to: '/gerente', label: 'Panel Gerente' },
-    { to: '/personas', label: 'Personas' },
-    { to: '/productos', label: 'Productos' },
-  ];
+const NAV_ITEMS = [
+  { to: '/dashboard', label: 'Inicio', roles: ['ADMINISTRADOR', 'GERENTE', 'VENDEDOR'] },
+];
 
-  const empleadoLinks = [
-    { to: '/empleado', label: 'Panel Empleado' },
-    { to: '/productos', label: 'Productos' },
-  ];
+export default function Sidebar() {
+  const { perfil } = useAuth();
+  const userRoles = perfil?.rolesInternos ?? [];
 
-  const links = role === 'gerente' ? gerenteLinks : empleadoLinks;
+  const links = NAV_ITEMS.filter((item) =>
+    item.roles.some((role) => userRoles.includes(role)),
+  );
+
+  const visibleLinks = links.length > 0 ? links : NAV_ITEMS.slice(0, 1);
 
   return (
     <aside className="sidebar">
-      <h2>App Personas</h2>
+      <div className="sidebar__brand">
+        <div>
+          <h2>Inventario D1</h2>
+          <span>Gestión interna</span>
+        </div>
+      </div>
       <nav>
-        {links.map((link) => (
+        {visibleLinks.map((link) => (
           <NavLink
             key={link.to}
             to={link.to}

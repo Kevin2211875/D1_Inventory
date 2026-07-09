@@ -1,98 +1,67 @@
 package com.uis.ejeMvc.model;
 
-import jakarta.persistence.*;
+import com.uis.ejeMvc.enums.UnidadMedida;
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-    @Entity
-    @Table(name = "Producto", schema = "dh")
-    public class Producto {
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private long id;
+@Getter
+@Setter
+@NoArgsConstructor
+@Entity
+@Table(name = "producto")
+public class Producto {
 
-        private String nombre;
-        private String descripcion;
-        private String precio;
-        private String cantidad;
-        private String FechaLlegada;
-        private String FechaExpiracion;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_producto")
+    private Integer idProducto;
 
-        public long getId() {
-            return id;
-        }
+    @Column(name = "codigo_barras", unique = true, length = 50)
+    private String codigoBarras;
 
-        public void setId(long id) {
-            this.id = id;
-        }
+    @Column(name = "nombre", nullable = false, length = 150)
+    private String nombre;
 
-        public String getNombre() {
-            return nombre;
-        }
+    @Column(name = "descripcion")
+    private String descripcion;
 
-        public void setNombre(String nombre) {
-            this.nombre = nombre;
-        }
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_categoria", nullable = false)
+    private Categoria categoria;
 
-        public String getDescripcion() {
-            return descripcion;
-        }
+    @Column(name = "marca", length = 100)
+    private String marca;
 
-        public void setDescripcion(String descripcion) {
-            this.descripcion = descripcion;
-        }
+    @Convert(converter = com.uis.ejeMvc.enums.UnidadMedidaConverter.class)
+    @Column(name = "unidad_medida", nullable = false, length = 30)
+    private UnidadMedida unidadMedida;
 
-        public String getPrecio() {
-            return precio;
-        }
+    @Column(name = "precio_venta", nullable = false, precision = 12, scale = 2)
+    private BigDecimal precioVenta;
 
-        public void setPrecio(String precio) {
-            this.precio = precio;
-        }
+    @Column(name = "es_perecedero", nullable = false)
+    private Boolean esPerecedero = false;
 
-        public String getCantidad() {
-            return cantidad;
-        }
+    @Column(name = "activo", nullable = false)
+    private Boolean activo = true;
 
-        public void setCantidad(String cantidad) {
-            this.cantidad = cantidad;
-        }
+    @Column(name = "fecha_creacion", nullable = false)
+    private LocalDateTime fechaCreacion;
 
-        public String getFechaLlegada() {
-            return FechaLlegada;
-        }
-
-        public void setFechaLlegada(String fechaLlegada) {
-            FechaLlegada = fechaLlegada;
-        }
-
-        public String getFechaExpiracion() {
-            return FechaExpiracion;
-        }
-
-        public void setFechaExpiracion(String fechaExpiracion) {
-            FechaExpiracion = fechaExpiracion;
-        }
-
-        public Producto(long id, String nombre, String descripcion, String precio, String cantidad, String fechaLlegada, String fechaExpiracion) {
-            super();
-            this.id = id;
-            this.nombre = nombre;
-            this.descripcion = descripcion;
-            this.precio = precio;
-            this.cantidad = cantidad;
-            this.FechaLlegada = fechaLlegada;
-            this.FechaExpiracion = fechaExpiracion;
-        }
-
-        public Producto() {super();}
-
-        public Producto(String nombre, String descripcion, String precio, String cantidad, String fechaLlegada, String fechaExpiracion) {
-            super();
-            this.nombre = nombre;
-            this.descripcion = descripcion;
-            this.precio = precio;
-            this.cantidad = cantidad;
-            this.FechaLlegada = fechaLlegada;
-            this.FechaExpiracion = fechaExpiracion;
-        }
-    }
+    @Column(name = "porcentaje_iva", nullable = false, precision = 5, scale = 2)
+    private BigDecimal porcentajeIva = BigDecimal.ZERO;
+}
