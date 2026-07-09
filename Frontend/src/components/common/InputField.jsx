@@ -7,6 +7,8 @@ export default function InputField({
   type = 'text',
   placeholder = '',
   required = false,
+  autoComplete,
+  error,
 }) {
   return (
     <div className="form-group">
@@ -19,8 +21,11 @@ export default function InputField({
         onChange={onChange}
         placeholder={placeholder}
         required={required}
-        className="form-control"
+        autoComplete={autoComplete}
+        className={`form-control${error ? ' form-control--error' : ''}`}
+        aria-invalid={Boolean(error)}
       />
+      {error && <span className="form-error">{error}</span>}
     </div>
   );
 }
