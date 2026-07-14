@@ -3,6 +3,8 @@ import { useAuth } from '../../context/AuthContext';
 
 const NAV_ITEMS = [
   { to: '/dashboard', label: 'Inicio', roles: ['ADMINISTRADOR', 'GERENTE', 'VENDEDOR'] },
+  { to: '/productos/registrar', label: 'Registrar producto', roles: ['VENDEDOR', 'GERENTE'] },
+  { to: '/usuarios', label: 'Gestión de usuarios', roles: ['GERENTE'] },
 ];
 
 export default function Sidebar() {

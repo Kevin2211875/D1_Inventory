@@ -2,7 +2,6 @@ package com.uis.ejeMvc.security.roles;
 
 import com.uis.ejeMvc.dto.security.PerfilIdpDTO;
 import com.uis.ejeMvc.enums.rolesSecurity.RolActivo;
-import com.uis.ejeMvc.enums.rolesSecurity.RolUsuario;
 import com.uis.ejeMvc.service.JwtIdpService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -12,9 +11,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Component
@@ -42,8 +39,7 @@ public class RolActivoContextResolver {
         }
 
         PerfilIdpDTO perfil = jwtIdpService.obtenerPerfilIdp();
-        List<String> roles = perfil.getRolesInternos();
-        List<RolActivo> disponibles = rolesActivosDisponibles(roles);
+        List<RolActivo> disponibles = RolActivo.disponiblesPara(perfil.getRolesInternos());
 
         if (disponibles.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No hay roles activos disponibles para este usuario.");
@@ -80,35 +76,6 @@ public class RolActivoContextResolver {
         Optional<RolActivo> res = Optional.of(elegido);
         request.setAttribute(ATTR_RESOLUCION_ROL_ACTIVO, new CacheRolActivo(res));
         return res;
-    }
-
-    /**
-     * Roles del JWT que pueden elegirse como {@linkplain RolActivo rol activo}. Si el usuario es gerente y
-     * vendedor a la vez se ofrece solo la combinación {@link RolActivo#GERENTE_VENDEDOR}.
-     */
-    private List<RolActivo> rolesActivosDisponibles(List<String> roles) {
-        if (roles == null || roles.isEmpty()) {
-            return List.of();
-        }
-
-        boolean hasGerente = roles.contains(RolUsuario.GERENTE.getNombreInterno());
-        boolean hasVendedor = roles.contains(RolUsuario.VENDEDOR.getNombreInterno());
-        boolean hasAdministrador = roles.contains(RolUsuario.ADMINISTRADOR.getNombreInterno());
-
-        List<RolActivo> out = new ArrayList<>();
-        if (hasGerente && hasVendedor) {
-            out.add(RolActivo.GERENTE_VENDEDOR);
-        } else if (hasGerente) {
-            out.add(RolActivo.GERENTE);
-        } else if (hasVendedor) {
-            out.add(RolActivo.VENDEDOR);
-        }
-
-        if (hasAdministrador) {
-            out.add(RolActivo.ADMINISTRADOR);
-        }
-
-        return out.stream().filter(Objects::nonNull).toList();
     }
 
     private HttpServletRequest currentRequest() {
