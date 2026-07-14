@@ -9,6 +9,10 @@ export default function InputField({
   required = false,
   autoComplete,
   error,
+  disabled = false,
+  min,
+  max,
+  step,
 }) {
   return (
     <div className="form-group">
@@ -22,6 +26,10 @@ export default function InputField({
         placeholder={placeholder}
         required={required}
         autoComplete={autoComplete}
+        disabled={disabled}
+        min={min}
+        max={max}
+        step={step}
         className={`form-control${error ? ' form-control--error' : ''}`}
         aria-invalid={Boolean(error)}
       />

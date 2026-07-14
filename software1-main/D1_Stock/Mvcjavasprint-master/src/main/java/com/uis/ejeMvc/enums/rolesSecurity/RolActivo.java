@@ -1,6 +1,9 @@
 package com.uis.ejeMvc.enums.rolesSecurity;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -27,6 +30,45 @@ public enum RolActivo {
 
     public String getHeaderValue() {
         return headerValue;
+    }
+
+    /**
+     * Indica si con este rol activo se pueden registrar ventas en el punto de venta.
+     * <p>Vender es una operación de tienda: la realizan el {@link #VENDEDOR}, el {@link #GERENTE} y quien es
+     * ambos ({@link #GERENTE_VENDEDOR}). El {@link #ADMINISTRADOR} gestiona la plataforma, no opera la caja,
+     * por lo que no puede registrar ventas mientras actúa con ese rol.</p>
+     */
+    public boolean permiteRegistrarVentas() {
+        return this == VENDEDOR || this == GERENTE || this == GERENTE_VENDEDOR;
+    }
+
+    /**
+     * Roles activos que puede elegir un usuario según sus roles internos D1 (los de {@link RolUsuario}).
+     * <p>Si es gerente y vendedor a la vez se ofrece solo la combinación {@link #GERENTE_VENDEDOR} en lugar de
+     * los dos por separado; el {@link #ADMINISTRADOR} siempre se ofrece de forma independiente cuando está
+     * presente. Es la única fuente de verdad sobre qué rol activo es válido para un usuario.</p>
+     */
+    public static List<RolActivo> disponiblesPara(Collection<String> rolesInternos) {
+        if (rolesInternos == null || rolesInternos.isEmpty()) {
+            return List.of();
+        }
+
+        boolean gerente = rolesInternos.contains(RolUsuario.GERENTE.getNombreInterno());
+        boolean vendedor = rolesInternos.contains(RolUsuario.VENDEDOR.getNombreInterno());
+        boolean administrador = rolesInternos.contains(RolUsuario.ADMINISTRADOR.getNombreInterno());
+
+        List<RolActivo> disponibles = new ArrayList<>();
+        if (gerente && vendedor) {
+            disponibles.add(GERENTE_VENDEDOR);
+        } else if (gerente) {
+            disponibles.add(GERENTE);
+        } else if (vendedor) {
+            disponibles.add(VENDEDOR);
+        }
+        if (administrador) {
+            disponibles.add(ADMINISTRADOR);
+        }
+        return List.copyOf(disponibles);
     }
 
     /** Texto para mensajes de error (valores de {@link #getHeaderValue()} en el orden del enum). */
